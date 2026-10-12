@@ -12,43 +12,39 @@ import se.sundsvall.users.integration.db.UserRepository;
 
 @WireMockAppTestSuite(files = "classpath:/GetUserIT/", classes = Application.class)
 @Sql(scripts = {
-        "/db/script/truncate.sql",
-        "/db/script/GetUserTest.sql"
+	"/db/script/truncate.sql",
+	"/db/script/GetUserTest.sql"
 })
 class GetUserIT extends AbstractAppTest {
-    private static final String RESPONSE = "response.json";
-    @Autowired
-    UserRepository userRepository;
+	private static final String RESPONSE = "response.json";
+	@Autowired
+	UserRepository userRepository;
 
-    @Test
-    void test01_getUserByEmail() {
+	@Test
+	void test01_getUserByEmail() {
 
-        final String email = "testmail1@sundsvall.se";
+		final String email = "testmail1@sundsvall.se";
 
+		setupCall()
+			.withServicePath("/api/users/emails/".concat(email))
+			.withHttpMethod(HttpMethod.GET)
+			.withExpectedResponseStatus(HttpStatus.OK)
+			.withExpectedResponse(RESPONSE)
+			.sendRequestAndVerifyResponse();
 
-        setupCall()
-                .withServicePath("/api/users/emails/".concat(email))
-                .withHttpMethod(HttpMethod.GET)
-                .withExpectedResponseStatus(HttpStatus.OK)
-                .withExpectedResponse(RESPONSE)
-                .sendRequestAndVerifyResponse();
+	}
 
+	@Test
+	void test02_getUserById() {
 
-    }
+		final Long id = 1L;
 
-    @Test
-    void test02_getUserById() {
+		setupCall()
+			.withServicePath("/api/users/ids/" + id)
+			.withHttpMethod(HttpMethod.GET)
+			.withExpectedResponseStatus(HttpStatus.OK)
+			.withExpectedResponse(RESPONSE)
+			.sendRequestAndVerifyResponse();
 
-        final Long id = 1L;
-
-
-        setupCall()
-                .withServicePath("/api/users/ids/" + id)
-                .withHttpMethod(HttpMethod.GET)
-                .withExpectedResponseStatus(HttpStatus.OK)
-                .withExpectedResponse(RESPONSE)
-                .sendRequestAndVerifyResponse();
-
-
-    }
+	}
 }
