@@ -10,37 +10,38 @@ import se.sundsvall.users.Application;
 
 @WireMockAppTestSuite(files = "classpath:/LoginIT/", classes = Application.class)
 @Sql(scripts = {
-        "/db/script/truncate.sql",
-        "/db/script/GetUserTest.sql"
+	"/db/script/truncate.sql",
+	"/db/script/GetUserTest.sql"
 })
 class LoginIT extends AbstractAppTest {
 
-    @Test
-    void test01_loginSuccess() {
+	@Test
+	void test01_loginSuccess() {
 
-        setupCall()
-                .withServicePath("/api/users/auth/login")
-                .withHttpMethod(HttpMethod.POST)
-                .withRequest("request.json")
-                .withExpectedResponseStatus(HttpStatus.OK)
-                .sendRequestAndVerifyResponse();
-    }
-    @Test
-    void test02_loginFailed() {
-        setupCall()
-                .withServicePath("/api/users/auth/login")
-                .withHttpMethod(HttpMethod.POST)
-                .withRequest("request.json")
-                .withExpectedResponseStatus(HttpStatus.UNAUTHORIZED)
-                .sendRequestAndVerifyResponse();
-    }
+		setupCall()
+			.withServicePath("/api/users/auth/login")
+			.withHttpMethod(HttpMethod.POST)
+			.withRequest("request.json")
+			.withExpectedResponseStatus(HttpStatus.OK)
+			.sendRequestAndVerifyResponse();
+	}
 
-    @Test
-    void test03_logoutSuccess() {
-        setupCall()
-                .withServicePath("/api/users/auth/logout")
-                .withHttpMethod(HttpMethod.POST)
-                .withExpectedResponseStatus(HttpStatus.OK)
-                .sendRequestAndVerifyResponse();
-    }
+	@Test
+	void test02_loginFailed() {
+		setupCall()
+			.withServicePath("/api/users/auth/login")
+			.withHttpMethod(HttpMethod.POST)
+			.withRequest("request.json")
+			.withExpectedResponseStatus(HttpStatus.UNAUTHORIZED)
+			.sendRequestAndVerifyResponse();
+	}
+
+	@Test
+	void test03_logoutSuccess() {
+		setupCall()
+			.withServicePath("/api/users/auth/logout")
+			.withHttpMethod(HttpMethod.POST)
+			.withExpectedResponseStatus(HttpStatus.OK)
+			.sendRequestAndVerifyResponse();
+	}
 }

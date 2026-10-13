@@ -1,6 +1,5 @@
 package se.sundsvall.users.apptest;
 
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
@@ -20,48 +19,47 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 @WireMockAppTestSuite(files = "classpath:/DeleteUserIT/", classes = Application.class)
 @Sql(scripts = {
-        "/db/script/truncate.sql",
-        "/db/script/UpdateUserAppTest.sql"
+	"/db/script/truncate.sql",
+	"/db/script/UpdateUserAppTest.sql"
 })
 class DeleteUserIT extends AbstractAppTest {
-    private static final String REQUEST = "request.json";
-    private static final String RESPONSE = "response.json";
+	private static final String REQUEST = "request.json";
+	private static final String RESPONSE = "response.json";
 
-    @Autowired
-    private UserRepository userRepository;
+	@Autowired
+	private UserRepository userRepository;
 
-    @Test
-    void test01_DeleteUserByEmail() {
+	@Test
+	void test01_DeleteUserByEmail() {
 
-        final String email = "testmail1@sundsvall.se";
+		final String email = "testmail1@sundsvall.se";
 
-        assertThat(userRepository.findByEmail(email)).isPresent();
+		assertThat(userRepository.findByEmail(email)).isPresent();
 
-        setupCall()
-                .withServicePath("/api/users/emails/".concat(email))
-                .withHttpMethod(HttpMethod.DELETE)
-                .withExpectedResponseStatus(HttpStatus.NO_CONTENT)
-                .sendRequestAndVerifyResponse();
+		setupCall()
+			.withServicePath("/api/users/emails/".concat(email))
+			.withHttpMethod(HttpMethod.DELETE)
+			.withExpectedResponseStatus(HttpStatus.NO_CONTENT)
+			.sendRequestAndVerifyResponse();
 
-        assertThat(userRepository.findByEmail(email)).isEmpty();
+		assertThat(userRepository.findByEmail(email)).isEmpty();
 
-    }
+	}
 
-    @Test
-    void test02_DeleteUserId() {
+	@Test
+	void test02_DeleteUserId() {
 
-        final Long id = 1L;
+		final Long id = 1L;
 
-        assertThat(userRepository.findById(id)).isPresent();
+		assertThat(userRepository.findById(id)).isPresent();
 
-        setupCall()
-                .withServicePath("/api/users/ids/" + id)
-                .withHttpMethod(HttpMethod.DELETE)
-                .withExpectedResponseStatus(HttpStatus.NO_CONTENT)
-                .sendRequestAndVerifyResponse();
+		setupCall()
+			.withServicePath("/api/users/ids/" + id)
+			.withHttpMethod(HttpMethod.DELETE)
+			.withExpectedResponseStatus(HttpStatus.NO_CONTENT)
+			.sendRequestAndVerifyResponse();
 
-        assertThat(userRepository.findById(id)).isEmpty();
+		assertThat(userRepository.findById(id)).isEmpty();
 
-
-    }
+	}
 }
